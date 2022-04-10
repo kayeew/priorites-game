@@ -1,6 +1,6 @@
 
+import React, { useState } from 'react'
 import { Button, Checkbox, Container, Grid, Typography, Card, CardContent, List, ListItem, FormControlLabel } from '@mui/material'
-import { useState } from 'react'
 import { foodList } from './datasets'
 
 type card = {
@@ -39,12 +39,12 @@ export const App = () => {
     // Shuffle words
     const shuffledWords = usedCards.length === 0
       ? foodList.sort(() => 0.5 - Math.random())
-      : foodList.filter(word => !usedCards.includes(word)).sort(() => 0.5 - Math.random())
+      : foodList.filter((word: string) => !usedCards.includes(word)).sort(() => 0.5 - Math.random())
 
-    // Get sub-array of first n elements after shuffled
+    // Get 5 random cards
     let random5Cards = shuffledWords.slice(0, 5)
 
-    setCards(random5Cards.map(word => ({ word, correct: false } as card)))
+    setCards(random5Cards.map((word: string) => ({ word, correct: false } as card)))
   }
 
   const onReveal = () => {
@@ -57,7 +57,7 @@ export const App = () => {
 
   const onToggleCheckbox = (selectedWord: string) => {
 
-    let updated = cards.map(card => card.word === selectedWord ? ({ ...card, correct: true } as card) : card)
+    let updated = cards.map(card => card.word === selectedWord ? ({ ...card, correct: !card.correct } as card) : card)
     setCards(updated)
   }
 
@@ -70,10 +70,10 @@ export const App = () => {
             Priorities
           </Typography>
           <List dense>
-            {rounds > 0 && cards.map(({ word, correct }) => (
+            {rounds > 0 && cards.map(({ word, correct }, index) => (
               <ListItem>
                 <FormControlLabel
-                  label={word}
+                  label={`${index + 1}. ${word}`}
                   control={<Checkbox checked={correct} onClick={() => onToggleCheckbox(word)} />}
                 />
               </ListItem>
